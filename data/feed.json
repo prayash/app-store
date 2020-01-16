@@ -1,0 +1,20 @@
+[
+  {
+    "id": "454638411",
+    "name": "Headspace: Meditation & Sleep",
+    "imageUrl": "https://github.com/prayash/app-store/raw/master/data/headspace-ad.jpg",
+    "tagline": "Live a healthier, happier, life"
+  },
+  {
+    "id": "389801252",
+    "name": "Spotify: Music and Podcasts",
+    "imageUrl": "https://github.com/prayash/app-store/raw/master/data/spotify-ad.jpg",
+    "tagline": "Music for every mood"
+  },
+  {
+    "id": "447188370",
+    "name": "Shazam",
+    "imageUrl": "https://github.com/prayash/app-store/raw/master/data/shazam-ad.jpg",
+    "tagline": "Name any song in seconds"
+  }
+]
