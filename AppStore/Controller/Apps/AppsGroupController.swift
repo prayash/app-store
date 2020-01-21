@@ -35,10 +35,7 @@ class AppsGroupController: HSnappingController {
 
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! AppRowCell
-        let app = appGroup?.feed.results[indexPath.row]
-        cell.companyLabel.text = app?.artistName
-        cell.nameLabel.text = app?.name
-        cell.imageView.sd_setImage(with: URL(string: app?.artworkUrl100 ?? ""))
+        cell.app = appGroup?.feed.results[indexPath.row]
 
         return cell
     }

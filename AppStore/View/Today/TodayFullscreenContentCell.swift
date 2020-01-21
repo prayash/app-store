@@ -28,7 +28,7 @@ class TodayFullscreenContentCell: UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
 
         addSubview(descriptionLabel)
-        descriptionLabel.fillSuperview(padding: .init(top: 0, left: 24, bottom: 0, right: 24))
+        descriptionLabel.fillSuperview(padding: .init(top: 24, left: 24, bottom: 0, right: 24))
     }
 
     required init?(coder: NSCoder) {
