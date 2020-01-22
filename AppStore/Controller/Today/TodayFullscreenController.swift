@@ -14,6 +14,7 @@ class TodayFullscreenController: UITableViewController {
         tableView.separatorStyle = .none
         tableView.allowsSelection = false
         tableView.contentInsetAdjustmentBehavior = .never
+        tableView.backgroundColor = UIColor(named: "secondaryGray")!
 
         let height = UIApplication.shared.statusBarFrame.height
         tableView.contentInset = .init(top: 0, left: 0, bottom: height, right: 0)

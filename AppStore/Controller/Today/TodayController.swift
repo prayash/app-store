@@ -51,7 +51,6 @@ class TodayController: UICollectionViewController {
         let dispatchGroup = DispatchGroup()
 
         var topGrossing: AppGroup?
-        var gamesGroup: AppGroup?
 
         dispatchGroup.enter()
         Network.shared.fetch(of: .topGrossing) { appGroup, error in
@@ -59,18 +58,11 @@ class TodayController: UICollectionViewController {
             dispatchGroup.leave()
         }
 
-        dispatchGroup.enter()
-        Network.shared.fetch(of: .newGames) { appGroup, error in
-            gamesGroup = appGroup
-            dispatchGroup.leave()
-        }
-
         dispatchGroup.notify(queue: .main) {
             self.items = [
+                TodayItem.init(category: "Inspiring Stories", title: "Credit Where It's (Honey) Due", image: UIImage(named: "honeydue")!, description: "Travis and Brianna were $20,000 in debt. Then they downloaded Honeydue.", bgColor: UIColor(named: "cream2")!, cellType: .article, apps: []),
                 TodayItem.init(category: "The Daily List", title: topGrossing?.feed.title ?? "", image: UIImage(named: "productivity")!, description: "", bgColor: UIColor(named: "getBtn")!, cellType: .apps, apps: topGrossing?.feed.results ?? []),
-                TodayItem.init(category: "LIFE HACK", title: "Utilizing your time", image: UIImage(named: "productivity")!, description: "All the tools and apps you need to intelligently organize your life the right way", bgColor: .white, cellType: .article, apps: []),
-                TodayItem.init(category: "FEATURED APP", title: "Looking to meditate?", image: UIImage(named: "oak-graphic")!, description: "A meditation app that helps you get to the root of your stresses", bgColor: UIColor(named: "getBtn")!, cellType: .featuredApp, apps: []),
-                TodayItem.init(category: "HOLIDAYS", title: "Travel on a budget", image: UIImage(named: "holiday")!, description: "Find out all you need to know on how to travel without packing everything", bgColor: UIColor(named: "cream")!, cellType: .article, apps: [])
+                TodayItem.init(category: "FEATURED APP", title: "Looking to meditate?", image: UIImage(named: "oak-graphic")!, description: "A meditation app that helps you get to the root of your stresses", bgColor: UIColor(named: "secondaryGray")!, cellType: .featuredApp, apps: [])
             ]
 
             self.activityIndicatorView.stopAnimating()
@@ -85,10 +77,17 @@ class TodayController: UICollectionViewController {
         collectionView.register(TodayCell.self, forCellWithReuseIdentifier: TodayItem.CellType.article.rawValue)
         collectionView.register(TodayAppsCell.self, forCellWithReuseIdentifier: TodayItem.CellType.apps.rawValue)
         collectionView.register(TodayFeaturedAppCell.self, forCellWithReuseIdentifier: TodayItem.CellType.featuredApp.rawValue)
+        collectionView.register(TodayHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "headerView")
     }
 
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return items.count
+    }
+
+    override func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+        let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "headerView", for: indexPath)
+
+        return headerView
     }
 
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -158,6 +157,7 @@ class TodayController: UICollectionViewController {
 
                     guard let cell = self.fullscreenController.tableView.cellForRow(at: [0, 0]) as? TodayFullscreenHeaderCell else { return }
                     cell.todayCell.topConstraint?.constant = 48
+                    cell.todayCell.descriptionLabel.layer.opacity = 0.0
                     cell.layoutIfNeeded()
             }, completion: nil)
         }
@@ -182,6 +182,7 @@ class TodayController: UICollectionViewController {
 
                 guard let cell = self.fullscreenController.tableView.cellForRow(at: [0, 0]) as? TodayFullscreenHeaderCell else { return }
                 cell.todayCell.topConstraint?.constant = 24
+                cell.todayCell.descriptionLabel.alpha = 1.0
                 cell.layoutIfNeeded()
         }) { _ in
             self.fullscreenController.view.removeFromSuperview()
@@ -206,6 +207,10 @@ extension TodayController: UICollectionViewDelegateFlowLayout {
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        return .init(top: 32, left: 0, bottom: 32, right: 0)
+        return .init(top: 12, left: 0, bottom: 32, right: 0)
+    }
+
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+        return .init(width: collectionView.frame.width, height: 72)
     }
 }

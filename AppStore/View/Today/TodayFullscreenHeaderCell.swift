@@ -6,6 +6,7 @@ class TodayFullscreenHeaderCell: UITableViewCell {
     let closeBtn: UIButton = {
         let btn = UIButton(type: .system)
         btn.setImage(UIImage(named: "close"), for: .normal)
+        btn.tintColor = .gray
         return btn
     }()
 
@@ -18,7 +19,7 @@ class TodayFullscreenHeaderCell: UITableViewCell {
         todayCell.fillSuperview()
 
         addSubview(closeBtn)
-        closeBtn.anchor(top: topAnchor, leading: nil, bottom: nil, trailing: trailingAnchor, padding: .init(top: 44, left: 0, bottom: 0, right: 12), size: .init(width: 80, height: 38))
+        closeBtn.anchor(top: topAnchor, leading: nil, bottom: nil, trailing: trailingAnchor, padding: .init(top: 44, left: 0, bottom: 0, right: 0), size: .init(width: 80, height: 38))
         closeBtn.addTarget(self, action: #selector(close), for: .touchUpInside)
     }
 
