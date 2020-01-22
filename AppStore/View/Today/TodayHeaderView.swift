@@ -2,7 +2,7 @@ import UIKit
 
 class TodayHeader: UICollectionReusableView {
 
-    let dateLabel = UILabel(text: "TUESDAY, JANUARY 21", font: .boldSystemFont(ofSize: 16))
+    let dateLabel = UILabel(text: "TUESDAY, JANUARY 21", font: .boldSystemFont(ofSize: 14))
     let headingLabel = UILabel(text: "Today", font: .systemFont(ofSize: 32, weight: .bold), numberOfLines: 1)
     let avatarButton: UIButton = {
         let btn = UIButton()
@@ -25,7 +25,7 @@ class TodayHeader: UICollectionReusableView {
 
         dateLabel.textColor = UIColor(named: "primaryGray")!
 
-        infoStack.fillSuperview(padding: .init(top: 12, left: 32, bottom: 0, right: 32))
+        infoStack.fillSuperview(padding: .init(top: 12, left: 20, bottom: 0, right: 20))
     }
 
     required init?(coder: NSCoder) {

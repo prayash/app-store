@@ -13,7 +13,7 @@ class TodayFeaturedAppCell: TodayCellItem {
     }
 
     let categoryLabel = UILabel(text: "CATEGORY", font: .boldSystemFont(ofSize: 16))
-    let titleLabel = UILabel(text: "Cell Title", font: .boldSystemFont(ofSize: 24), numberOfLines: 2)
+    let titleLabel = UILabel(text: "Cell Title", font: .boldSystemFont(ofSize: 28), numberOfLines: 2)
     let imageView = UIImageView(image: UIImage(named: "productivity"))
     let descriptionLabel = UILabel(text: "Some decently long description of what this cell is about", font: .systemFont(ofSize: 14), numberOfLines: 3)
 

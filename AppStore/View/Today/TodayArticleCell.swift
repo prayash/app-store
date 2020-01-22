@@ -18,7 +18,7 @@ class TodayCell: TodayCellItem {
 
     let categoryLabel = UILabel(text: "CATEGORY", font: .boldSystemFont(ofSize: 20))
     let titleLabel = UILabel(text: "Cell Title", font: .systemFont(ofSize: 28, weight: .bold), numberOfLines: 2)
-    let imageView = UIImageView(image: UIImage(named: "productivity"))
+    let imageView = UIImageView(image: UIImage())
     let descriptionLabel = UILabel(text: "Some decently long description of what this cell is about", font: .systemFont(ofSize: 14), numberOfLines: 3)
 
     var topConstraint: NSLayoutConstraint?

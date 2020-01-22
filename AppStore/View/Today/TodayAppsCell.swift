@@ -11,7 +11,7 @@ class TodayAppsCell: TodayCellItem {
     }
 
     let categoryLabel = UILabel(text: "THE DAILY LIST", font: .boldSystemFont(ofSize: 16))
-    let titleLabel = UILabel(text: "Start a Quick Conversation", font: .boldSystemFont(ofSize: 24), numberOfLines: 2)
+    let titleLabel = UILabel(text: "Start a Quick Conversation", font: .boldSystemFont(ofSize: 28), numberOfLines: 2)
     let appsController = TodayAppsController(mode: .small)
 
     override init(frame: CGRect) {
