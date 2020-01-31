@@ -3,7 +3,7 @@ import UIKit
 class TodayFullscreenController: UITableViewController {
 
     var dismissHandler: (() ->())?
-    var todayItem: TodayItem?
+    var item: TodayItem?
 
     override var prefersStatusBarHidden: Bool { return true }
 
@@ -16,7 +16,7 @@ class TodayFullscreenController: UITableViewController {
         tableView.contentInsetAdjustmentBehavior = .never
         tableView.backgroundColor = UIColor(named: "secondaryGray")!
 
-        let height = UIApplication.shared.statusBarFrame.height
+        let height = view.window?.windowScene?.statusBarManager?.statusBarFrame.height ?? 0
         tableView.contentInset = .init(top: 0, left: 0, bottom: height, right: 0)
     }
 
@@ -26,9 +26,9 @@ class TodayFullscreenController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if indexPath.item == 0 {
-            if todayItem?.cellType == TodayItem.CellType.featuredApp {
+            if item?.cellType == TodayItem.CellType.featuredApp {
                 let headerCell = TodayFeaturedAppFullscreenHeaderCell()
-                headerCell.todayCell.todayItem = todayItem
+                headerCell.todayCell.todayItem = item
                 headerCell.todayCell.layer.cornerRadius = 0
                 headerCell.onClose = { [unowned self] in
                     headerCell.closeBtn.isHidden = true
@@ -39,8 +39,8 @@ class TodayFullscreenController: UITableViewController {
             }
 
             let headerCell = TodayFullscreenHeaderCell()
-            headerCell.todayCell.todayItem = todayItem
-            headerCell.todayCell.layer.cornerRadius = 0
+            headerCell.content.todayItem = item
+            headerCell.content.layer.cornerRadius = 0
             headerCell.onClose = { [unowned self] in
                 headerCell.closeBtn.isHidden = true
                 self.dismissHandler?()

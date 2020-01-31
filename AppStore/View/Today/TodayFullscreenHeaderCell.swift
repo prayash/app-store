@@ -2,7 +2,9 @@ import UIKit
 
 class TodayFullscreenHeaderCell: UITableViewCell {
 
-    let todayCell = TodayCell()
+    /// The content of this cell looks identical to the `TodayCell` component.
+    let content = TodayCell()
+
     let closeBtn: UIButton = {
         let btn = UIButton(type: .system)
         btn.setImage(UIImage(named: "close"), for: .normal)
@@ -15,8 +17,8 @@ class TodayFullscreenHeaderCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
 
-        addSubview(todayCell)
-        todayCell.fillSuperview()
+        addSubview(content)
+        content.fillSuperview()
 
         addSubview(closeBtn)
         closeBtn.anchor(top: topAnchor, leading: nil, bottom: nil, trailing: trailingAnchor, padding: .init(top: 44, left: 0, bottom: 0, right: 0), size: .init(width: 80, height: 38))

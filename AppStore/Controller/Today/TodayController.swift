@@ -11,6 +11,7 @@ class TodayController: UICollectionViewController {
     /// Data source for all Today cards
     var items = [TodayItem]()
 
+    /// A set of constraints for the expanding/contracting of cells.
     var cellTopConstraint: NSLayoutConstraint?
     var cellLeadingConstraint: NSLayoutConstraint?
     var cellWidthConstraint: NSLayoutConstraint?
@@ -99,6 +100,7 @@ class TodayController: UICollectionViewController {
     }
 
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        // This cell will render a modal!
         if items[indexPath.item].cellType == .apps {
             let fullController = TodayAppsController(mode: .fullScreen)
             fullController.results = self.items[indexPath.item].apps
@@ -107,12 +109,18 @@ class TodayController: UICollectionViewController {
             return
         }
 
+
+        // What we're doing here is instantiating a new view controller, taking
+        // its root view, and manipulating its constraints, adding it to our current
+        // view as a sibling of the entire `UICollectionView`.
         let fullscreenController = TodayFullscreenController()
-        fullscreenController.todayItem = items[indexPath.item]
+        fullscreenController.item = items[indexPath.item]
         fullscreenController.dismissHandler = { [unowned self] in
             self.handleDismiss()
         }
 
+        // Our expansion view is derived from the previously instantiated controller
+        // And we take its root view and make it a part of the current view hierarchy.
         let expandedCellView = fullscreenController.view!
         view.addSubview(expandedCellView)
         addChild(fullscreenController)
@@ -121,12 +129,15 @@ class TodayController: UICollectionViewController {
         // Disable the collectionView during animation
         self.collectionView.isUserInteractionEnabled = false
 
+        // Apply corner radius to the cell to match the card cell
         expandedCellView.layer.cornerRadius = 16
-        expandedCellView.frame = CGRect(x: 0, y: 0, width: 100, height: 200)
 
+        // First, we grab the selected cell, and grab its initial frame in its current state
+        // The reason for this is so we can shrink it back to the exact same state!
         if let cell = collectionView.cellForItem(at: indexPath),
             let initialCellFrame = cell.superview?.convert(cell.frame, to: nil) {
 
+            // We'll grab the cell's frame and persist it to our own copy of constraints
             expandedCellView.translatesAutoresizingMaskIntoConstraints = false
             cellTopConstraint = expandedCellView.topAnchor.constraint(equalTo: view.topAnchor, constant: initialCellFrame.origin.y)
             cellLeadingConstraint = expandedCellView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: initialCellFrame.origin.x)
@@ -147,17 +158,20 @@ class TodayController: UICollectionViewController {
             UIView.animate(
                 withDuration: 0.7, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 0.7,
                 options: .curveEaseOut, animations: {
+                    // Force the cell to take up the entire viewport
                     self.cellTopConstraint?.constant = 0
                     self.cellLeadingConstraint?.constant = 0
                     self.cellWidthConstraint?.constant = self.view.frame.width
                     self.cellHeightConstraint?.constant = self.view.frame.height
                     self.view.layoutIfNeeded()
 
+                    // Hide the tab bar!
                     self.tabBarController?.tabBar.frame.origin.y = self.view.frame.size.height
 
+                    // Adjust the heading and description of the expanded cell
                     guard let cell = self.fullscreenController.tableView.cellForRow(at: [0, 0]) as? TodayFullscreenHeaderCell else { return }
-                    cell.todayCell.topConstraint?.constant = 48
-                    cell.todayCell.descriptionLabel.layer.opacity = 0.0
+                    cell.content.topConstraint?.constant = 48
+                    cell.content.descriptionLabel.layer.opacity = 0.0
                     cell.layoutIfNeeded()
             }, completion: nil)
         }
@@ -167,22 +181,26 @@ class TodayController: UICollectionViewController {
         UIView.animate(
             withDuration: 0.7, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 0.7,
             options: .curveEaseOut, animations: {
+
                 guard let initialCellFrame = self.focusedCellInitialFrame else { return }
 
+                // Set all the constraints back to the original frame.
                 self.cellTopConstraint?.constant = initialCellFrame.origin.y
                 self.cellLeadingConstraint?.constant = initialCellFrame.origin.x
                 self.cellWidthConstraint?.constant = initialCellFrame.width
                 self.cellHeightConstraint?.constant = initialCellFrame.height
                 self.view.layoutIfNeeded()
+
                 self.fullscreenController.tableView.contentOffset = .zero
 
+                // Show the tab bar!
                 if let tabBarFrame = self.tabBarController?.tabBar.frame {
                     self.tabBarController?.tabBar.frame.origin.y = self.view.frame.size.height - tabBarFrame.height
                 }
 
                 guard let cell = self.fullscreenController.tableView.cellForRow(at: [0, 0]) as? TodayFullscreenHeaderCell else { return }
-                cell.todayCell.topConstraint?.constant = 24
-                cell.todayCell.descriptionLabel.alpha = 1.0
+                cell.content.topConstraint?.constant = 24
+                cell.content.descriptionLabel.alpha = 1.0
                 cell.layoutIfNeeded()
         }) { _ in
             self.fullscreenController.view.removeFromSuperview()
