@@ -35,11 +35,43 @@ class TodayFullscreenController: UIViewController, UITableViewDelegate, UITableV
     }
 
     private func configureFloatingControl() {
-        print("Hello")
         let floatingContainer = UIView()
-        floatingContainer.backgroundColor = .systemRed
+        floatingContainer.layer.cornerRadius = 16
+        floatingContainer.clipsToBounds = true
         view.addSubview(floatingContainer)
-        floatingContainer.anchor(top: nil, leading: view.leadingAnchor, bottom: view.bottomAnchor, trailing: view.trailingAnchor, padding: .init(top: 0, left: 16, bottom: 16, right: 16), size: .init(width: 0, height: 100))
+
+        let bottomPadding = UIApplication.shared.statusBarFrame.height / 2
+        floatingContainer.anchor(top: nil, leading: view.leadingAnchor, bottom: view.bottomAnchor, trailing: view.trailingAnchor, padding: .init(top: 0, left: 16, bottom: bottomPadding, right: 16), size: .init(width: 0, height: 90))
+
+        let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .regular))
+        floatingContainer.addSubview(blurView)
+        blurView.fillSuperview()
+
+        let imgView = UIImageView(cornerRadius: 16)
+        imgView.image = item?.image
+        imgView.constrainHeight(constant: 68)
+        imgView.constrainWidth(constant: 68)
+
+        let getBtn = UIButton(title: "GET")
+        getBtn.setTitleColor(.white, for: .normal)
+        getBtn.titleLabel?.font = .boldSystemFont(ofSize: 16)
+        getBtn.backgroundColor = .darkGray
+        getBtn.layer.cornerRadius = 16
+        getBtn.constrainWidth(constant: 80)
+        getBtn.constrainHeight(constant: 32)
+
+        let stackView = UIStackView(subviews: [
+            imgView,
+            VStack(subviews: [
+                UILabel(text: "Honeydue: Couples Finance", font: .boldSystemFont(ofSize: 18)),
+                UILabel(text: "Manage your money together", font: .systemFont(ofSize: 16))
+            ], spacing: 4),
+            getBtn
+        ], customSpacing: 16)
+
+        floatingContainer.addSubview(stackView)
+        stackView.fillSuperview(padding: .init(top: 0, left: 16, bottom: 0, right: 16))
+        stackView.alignment = .center
     }
 
     // MARK: - UITableView
